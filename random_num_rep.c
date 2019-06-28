@@ -40,11 +40,20 @@ int main(int argc, char **argv)
 {
   /*  Kanji character sets for numbers  */
   /*  Ones  */
-  char *ones[10] = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"} ;
+  char *k_ones[10] = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"} ;
+  /*                    0     1     2     3     4     5     6     7     8     9   */
 
   /*  Factors of 10  */
-  char *factors[7] = {"十", "百", "千", "万", "億", "兆", "京"};
-
+  /*                          0    1     2     3         */
+  char *k_factors[2][5] = { {"", "十", "百", "千", ""},
+                            {"", "万", "億", "兆", "京"} };
+  /*                          0    1     2     3     4   */
+  /*  First row contains factors up to 10**3: 10**0 x 10**index
+   *  Second row: 10**3 x 10**index
+   *  Element with index 0 is left blank so that the powers of
+   *  10 progress with the index; this makes it easier to implement
+   *  the loop which translates the numbers.
+   */
 
   /*  Initialise RNG  */
   srandom(time(0));
@@ -54,10 +63,12 @@ int main(int argc, char **argv)
   setlocale(LC_NUMERIC, "");
 
 
-  int i;
+  int i, j, k, n;
   long LowerLim, UpperLim, number;
   int digits[MAXDIGITS], numdigits;
   char ans;
+
+  char *k_number_ptr[MAXDIGITS * 2];
 
 
   /***  BEGIN parse command line arguments  ***/
@@ -102,13 +113,38 @@ int main(int argc, char **argv)
     /*  Generate random number  */
     number = (long)((UpperLim - LowerLim)*(1.0*random()/RAND_MAX) + LowerLim);
 
-    printf("\n-> Random number: %'17ld\n", number);
-
     /*  Separate every digit  */
     numdigits = breakint(number, digits);
-    for (i=MAXDIGITS-1 ; i>=0 ; i--)
-      printf(i == 0 ? "%d.\n" : "%d, ", digits[i]);
-    printf("Number of digits in integer: %d\nTest kanji:\t0 : %s\t10**8 : %s\n", numdigits, ones[0], factors[4]);
+
+    /***  BEGIN Convert western-arabic digits to japanese numerals  ***/
+
+    n = 0;
+    for (k=0 ; k<numdigits ; k++)
+    {
+      i = k/4;
+      j = k%4;
+
+      if (j == 0 && i != 0)
+        k_number_ptr[n++] = k_factors[1][i];
+
+      if (digits[k] != 0)
+      {
+        k_number_ptr[n++] = k_factors[0][j];
+        k_number_ptr[n++] = k_ones[digits[k]];
+      }
+    }
+    /***  END Convert western-arabic digits to japanese numerals  ***/
+
+
+    /*  Print  */
+    printf("\n\t%'17ld\n", number);
+    printf("\nPress any key to print the conversion.\n");
+    getchar();
+
+    printf("\t");
+    for (i=n-1 ; i>=0 ; i--)
+      printf("%s", k_number_ptr[i]);
+
 
     printf("\n");
 
