@@ -55,6 +55,48 @@ int main(int argc, char **argv)
    *  the loop which translates the numbers.
    */
 
+
+  /*  Hiragana names for the numbers  */
+  /*  Ones  */
+  char *h_ones[10] = {  "れい",    // 0
+                        "いち",    // 1
+                          "に",    // 2
+                        "さん",    // 3
+                        "よん",    // 4
+                          "ご",    // 5
+                        "ろく",    // 6
+                        "なな",    // 7
+                        "はち",    // 8
+                      "きゅう" };  // 9
+
+  /*  Factors of 10  */
+  /*  + exceptions   */
+  char *h_factors[23] = {        "じゅう",    //  0 : 10
+                                 "ひゃく",    //  1 : 100
+                                   "せん",    //  2 : 1000
+                                   "まん",    //  3 : 10,000
+                                   "おく",    //  4 : 100,000,000
+                                 "ちょう",    //  5 : 1,000,000,000,000
+                                   "けい",    //  6 : 10,000,000,000,000,000
+                             "さんびゃく",    //  7 : 300
+                             "ろっぴゃく",    //  8 : 600
+                             "はっぴゃく",    //  9 : 800
+                               "さんぜん",    // 10 : 3000
+                               "はっせん",    // 11 : 8000
+                             "いっちょう",    // 12 :    1,000,000,000,000
+                             "はっちょう",    // 13 :    8,000,000,000,000
+                           "じゅっちょう",    // 14 :   10,000,000,000,000
+                           "ひゃくちょう",    // 15 :  100,000,000,000,000
+                         "いっせんちょう",    // 16 : 1000,000,000,000,000
+                               "いっけい",    // 17 :     10,000,000,000,000,000
+                               "ろっけい",    // 18 :     60,000,000,000,000,000
+                               "はっけい",    // 19 :     80,000,000,000,000,000
+                             "じゅっけい",    // 20 :    100,000,000,000,000,000
+                             "ひゃっけい",    // 21 :   1000,000,000,000,000,000
+                           "いっせんけい" };  // 22 : 10,000,000,000,000,000,000
+
+
+
   /*  Initialise RNG  */
   srandom(time(0));
 
@@ -130,7 +172,9 @@ int main(int argc, char **argv)
       if (digits[k] != 0)
       {
         k_number_ptr[n++] = k_factors[0][j];
-        k_number_ptr[n++] = k_ones[digits[k]];
+
+        if (j == 0 || digits[k] != 1)
+          k_number_ptr[n++] = k_ones[digits[k]];
       }
     }
     /***  END Convert western-arabic digits to japanese numerals  ***/
@@ -163,7 +207,8 @@ int main(int argc, char **argv)
 
 
 /*
- *  Function to separate every digit in a number
+ *  Function to separate every digit in a number and
+ *  store in an array of integers.
  *
  *  x: input number,
  *  x_array: array of integers of length MAXDIGIT to hold every digit
