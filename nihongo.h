@@ -37,5 +37,4 @@ char *k_factors[2][5];
 char *h_ones[10];
 char *h_factors[23];
 
-
 #endif
