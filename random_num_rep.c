@@ -40,6 +40,7 @@ int main(int argc, char **argv)
   char ans;
 
   char *k_number_ptr[MAXDIGITS * 2];
+  char *h_number_ptr[MAXDIGITS * 2];
 
 
   /***  BEGIN parse command line arguments  ***/
@@ -85,7 +86,7 @@ int main(int argc, char **argv)
     number = (long)((UpperLim - LowerLim)*(1.0*random()/RAND_MAX) + LowerLim);
 
     /*  Convert western number to japanese number  */
-    n = convert_num2jap(number, k_number_ptr);
+    n = convert_num2jap(number, k_number_ptr, h_number_ptr);
 
     /*  Print  */
     printf("\n\t%'17ld\n", number);
@@ -95,6 +96,11 @@ int main(int argc, char **argv)
     printf("\t");
     for (i=n-1 ; i>=0 ; i--)
       printf("%s", k_number_ptr[i]);
+
+    printf("\n");
+
+    for (i=n-1 ; i>=0 ; i--)
+      printf("%s", h_number_ptr[i]);
 
     printf("\n");
 

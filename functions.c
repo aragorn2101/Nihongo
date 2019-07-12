@@ -54,7 +54,7 @@ int breakint (long x, int *x_array)
  *  Returns the number of slots used in the num_ptr array.
  *
  */
-int convert_num2jap(long number, char **num_ptr)
+int convert_num2jap(long number, char **num_ptr, char **words_ptr)
 {
   int i, j, k, n;
   int digits[MAXDIGITS];
@@ -72,14 +72,21 @@ int convert_num2jap(long number, char **num_ptr)
     j = k%4;
 
     if (j == 0 && i != 0)
-      num_ptr[n++] = k_factors[1][i];
+    {
+      num_ptr[n] = k_factors[1][i];
+      words_ptr[n++] = h_factors[i+3];
+    }
 
     if (digits[k] != 0)
     {
-      num_ptr[n++] = k_factors[0][j];
+      num_ptr[n] = k_factors[0][j];
+      words_ptr[n++] = h_factors[j];
 
       if (j == 0 || digits[k] != 1)
-        num_ptr[n++] = k_ones[digits[k]];
+      {
+        num_ptr[n] = k_ones[digits[k]];
+        words_ptr[n++] = h_ones[digits[k]];
+      }
     }
   }
   /***  END Convert western-arabic digits to japanese numerals  ***/
