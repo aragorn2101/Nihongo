@@ -1,5 +1,6 @@
 /*
  *  Source file for the stand-alone functions.
+ *  --  UNDER DEVELOPMENT  --
  *
  */
 
@@ -79,13 +80,25 @@ int convert_num2jap(long number, char **num_ptr, char **words_ptr)
 
     if (digits[k] != 0)
     {
-      num_ptr[n] = k_factors[0][j];
-      words_ptr[n++] = h_factors[j];
-
-      if (j == 0 || digits[k] != 1)
+      if (cross_match[j+1][digits[k]] != 0)
       {
-        num_ptr[n] = k_ones[digits[k]];
-        words_ptr[n++] = h_ones[digits[k]];
+        num_ptr[n] = k_factors[0][j];
+        words_ptr[n++] = h_factors[cross_match[j+1][digits[k]]];
+        n++;
+
+        if (j == 0 || digits[k] != 1)
+          num_ptr[n] = k_ones[digits[k]];
+      }
+      else
+      {
+        num_ptr[n] = k_factors[0][j];
+        words_ptr[n++] = h_factors[j];
+
+        if (j == 0 || digits[k] != 1)
+        {
+          num_ptr[n] = k_ones[digits[k]];
+          words_ptr[n++] = h_ones[digits[k]];
+        }
       }
     }
   }
