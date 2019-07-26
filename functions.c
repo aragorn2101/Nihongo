@@ -1,6 +1,5 @@
 /*
  *  Source file for the stand-alone functions.
- *  --  UNDER DEVELOPMENT  --
  *
  */
 
@@ -55,9 +54,9 @@ int breakint (long x, int *x_array)
  *  Returns the number of slots used in the num_ptr array.
  *
  */
-int convert_num2jap(long number, char **num_ptr, char **words_ptr)
+int convert_num2jap(long number, char **num_ptr, char **words_ptr, int *m, int *n)
 {
-  int i, j, k, n;
+  int i, j, k;
   int digits[MAXDIGITS];
   int numdigits;
 
@@ -66,7 +65,8 @@ int convert_num2jap(long number, char **num_ptr, char **words_ptr)
 
 
   /***  BEGIN Convert western-arabic digits to japanese numerals  ***/
-  n = 0;
+  *m = 0;
+  *n = 0;
   for (k=0 ; k<numdigits ; k++)
   {
     i = k/4;
@@ -74,35 +74,31 @@ int convert_num2jap(long number, char **num_ptr, char **words_ptr)
 
     if (j == 0 && i != 0)
     {
-      num_ptr[n] = k_factors[1][i];
-      words_ptr[n++] = h_factors[i+3];
+      num_ptr[(*m)++] = k_factors[1][i];
+      words_ptr[(*n)++] = h_factors[i+3];
     }
 
     if (digits[k] != 0)
     {
-      if (cross_match[j+1][digits[k]] != 0)
+      /*  Japanese numerals  */
+      num_ptr[(*m)++] = k_factors[0][j];
+
+      if (j == 0 || digits[k] != 1)
+        num_ptr[(*m)++] = k_ones[digits[k]];
+
+      /*  In words (hiragana)  */
+      if (cross_match[j][digits[k]] == 0)
       {
-        num_ptr[n] = k_factors[0][j];
-        words_ptr[n++] = h_factors[cross_match[j+1][digits[k]]];
-        n++;
+        words_ptr[(*n)++] = h_factors[j];
 
         if (j == 0 || digits[k] != 1)
-          num_ptr[n] = k_ones[digits[k]];
+          words_ptr[(*n)++] = h_ones[digits[k]];
       }
       else
-      {
-        num_ptr[n] = k_factors[0][j];
-        words_ptr[n++] = h_factors[j];
-
-        if (j == 0 || digits[k] != 1)
-        {
-          num_ptr[n] = k_ones[digits[k]];
-          words_ptr[n++] = h_ones[digits[k]];
-        }
-      }
+        words_ptr[(*n)++] = h_factors[cross_match[j][digits[k]]];
     }
   }
   /***  END Convert western-arabic digits to japanese numerals  ***/
 
-  return(n);
+  return(*m);
 }

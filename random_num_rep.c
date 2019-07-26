@@ -35,7 +35,7 @@ int main(int argc, char **argv)
       comma separated format  */
   setlocale(LC_NUMERIC, "");
 
-  int i, n;
+  int i, m, n;
   long LowerLim, UpperLim, number;
   char ans;
 
@@ -86,7 +86,8 @@ int main(int argc, char **argv)
     number = (long)((UpperLim - LowerLim)*(1.0*random()/RAND_MAX) + LowerLim);
 
     /*  Convert western number to japanese number  */
-    n = convert_num2jap(number, k_number_ptr, h_number_ptr);
+    printf("Calling convert_num2jap ...\n");
+    convert_num2jap(number, k_number_ptr, h_number_ptr, &m, &n);
 
     /*  Print  */
     printf("\n\t%'17ld\n", number);
@@ -94,7 +95,7 @@ int main(int argc, char **argv)
     getchar();
 
     printf("\t");
-    for (i=n-1 ; i>=0 ; i--)
+    for (i=m-1 ; i>=0 ; i--)
       printf("%s", k_number_ptr[i]);
 
     printf("\n");

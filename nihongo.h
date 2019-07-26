@@ -27,7 +27,7 @@
 /*  Function prototypes  */
 /*  Source code in functions.c  */
 int breakint (long, int *);
-int convert_num2jap(long, char **, char **);
+int convert_num2jap(long, char **, char **, int *, int *);
 
 
 /*  Definition of global variables  */
@@ -36,6 +36,6 @@ char *k_ones[10];
 char *k_factors[2][5];
 char *h_ones[10];
 char *h_factors[24];
-
+int cross_match[8][10];
 
 #endif
